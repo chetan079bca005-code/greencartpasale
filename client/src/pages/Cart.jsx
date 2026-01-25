@@ -17,8 +17,7 @@ const Cart = () => {
     getCartAmount,
     axios,
     user,
-    setCartItems
-  } = useAppContext();
+   
 
   const [cartArray, setCartArray] = useState([]);
   const [addresses, setAddresses] = useState([]);
