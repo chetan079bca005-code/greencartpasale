@@ -219,7 +219,7 @@ const Navbar = () => {
                   className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center cursor-pointer border-2 border-transparent hover:border-primary transition-all overflow-hidden"
                   onClick={() => setShowDropdown(!showDropdown)}
                 >
-                  <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-black uppercase italic italic">
+                  <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-black uppercase italic">
                     {user.name.charAt(0)}
                   </div>
                 </div>
