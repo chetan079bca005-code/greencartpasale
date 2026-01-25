@@ -1,82 +1,90 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Delivery = () => {
   const deliveryInfo = [
     {
-      title: "Standard Delivery",
-      description: "3-5 business days",
-      price: "Free for orders over $50",
-      details: "Standard delivery is available for all orders. Orders are typically processed within 1-2 business days and delivered within 3-5 business days."
+      title: "Standard Shipping",
+      description: "3-5 Business Days",
+      price: "FREE for orders over $50",
+      details: "Our standard delivery service for all orders. Orders are typically processed within 24-48 hours."
     },
     {
-      title: "Express Delivery",
-      description: "1-2 business days",
-      price: "$9.99",
-      details: "Get your order delivered faster with our express delivery service. Orders placed before 2 PM will be processed the same day."
+      title: "Express Shipping",
+      description: "1-2 Business Days",
+      price: "$9.99 Fee",
+      details: "Get your products faster with our express delivery service. Priority handling for immediate dispatch."
     },
     {
       title: "Same Day Delivery",
-      description: "Same day",
-      price: "$14.99",
-      details: "Available for orders placed before 12 PM in select areas. Delivery will be made between 2 PM and 8 PM on the same day."
+      description: "Deliver Today",
+      price: "$14.99 Fee",
+      details: "Available in select areas for orders placed before 12:00 PM. Fast and reliable same-day service."
     }
   ];
 
   return (
-    <div className="pt-24 pb-10">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Delivery Information</h1>
-        
-        <div className="space-y-8">
-          {/* Delivery Options */}
+    <div className="pb-24">
+      {/* Header Section */}
+      <div className="bg-slate-900 py-16 px-6 text-center relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
+        <div className="relative z-10 max-w-4xl mx-auto">
+          <span className="text-primary font-bold tracking-[0.3em] text-[10px] uppercase mb-4 inline-block">Shipping Information</span>
+          <h1 className="text-3xl md:text-6xl font-black text-white mb-4 uppercase tracking-tighter italic">Delivery Policy</h1>
+          <p className="text-slate-400 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed font-medium">
+            Find out about our shipping methods, estimated delivery times, and shipping costs.
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 -mt-16 relative z-20">
+        <div className="space-y-12">
+          {/* Options */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {deliveryInfo.map((option, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-sm p-6">
-                <h3 className="text-xl font-semibold mb-2">{option.title}</h3>
-                <p className="text-primary font-medium mb-2">{option.description}</p>
-                <p className="text-gray-600 mb-3">{option.price}</p>
-                <p className="text-gray-600 text-sm">{option.details}</p>
+              <div key={index} className="premium-card p-8 bg-white group hover:bg-slate-900 transition-all duration-500 border-slate-100">
+                <h3 className="text-xl font-black text-slate-800 mb-2 uppercase tracking-tight group-hover:text-white transition-colors">{option.title}</h3>
+                <p className="text-primary font-black text-xs uppercase tracking-widest mb-4">{option.description}</p>
+                <p className="text-slate-400 font-bold mb-6 group-hover:text-slate-500 transition-colors uppercase text-[10px] tracking-widest">{option.price}</p>
+                <p className="text-slate-500 font-medium text-sm leading-relaxed group-hover:text-slate-400 transition-colors">{option.details}</p>
               </div>
             ))}
           </div>
 
-          {/* Additional Information */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-semibold mb-4">Important Information</h2>
-            <ul className="space-y-3 text-gray-600">
-              <li className="flex items-start gap-2">
-                <svg className="w-5 h-5 text-primary mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span>All delivery times are estimates and may vary depending on your location and order volume.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <svg className="w-5 h-5 text-primary mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span>Orders are not delivered on weekends or public holidays.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <svg className="w-5 h-5 text-primary mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span>You can track your order status in your account dashboard or using the tracking number provided in your shipping confirmation email.</span>
-              </li>
-            </ul>
-          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            {/* Additional Information */}
+            <div className="premium-card p-10 bg-white border-slate-100">
+              <h2 className="text-2xl font-black text-slate-900 mb-8 uppercase tracking-tight italic">Important Details</h2>
+              <ul className="space-y-6">
+                {[
+                  "Delivery times are estimates and may vary due to external factors.",
+                  "We do not ship on weekends or public holidays.",
+                  "You can track your order in real-time through your account dashboard."
+                ].map((text, i) => (
+                  <li key={i} className="flex items-start gap-4 text-slate-500 font-medium">
+                    <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+                      <svg className="w-3 h-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
+                    </div>
+                    <span className="text-sm leading-relaxed">{text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Contact Support */}
-          <div className="bg-primary/5 rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">Need Help?</h2>
-            <p className="text-gray-600 mb-4">
-              If you have any questions about delivery or need assistance with your order, our customer support team is here to help.
-            </p>
-            <a
-              href="/contact"
-              className="inline-block px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dull transition-colors duration-300"
-            >
-              Contact Support
-            </a>
+            {/* Contact Support */}
+            <div className="bg-slate-900 p-10 rounded-[2.5rem] flex flex-col justify-center items-center text-center shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+              <h2 className="text-2xl font-black text-white mb-4 uppercase tracking-tight italic relative z-10">Have Questions?</h2>
+              <p className="text-slate-400 mb-8 font-medium text-sm max-w-sm relative z-10">
+                If you have any specific delivery requirements or need further assistance, our support team is here to help.
+              </p>
+              <Link
+                to="/contact"
+                className="inline-block px-10 py-4 bg-primary text-white font-black rounded-xl hover:bg-white hover:text-slate-900 transition-all uppercase tracking-widest text-[10px] relative z-10"
+              >
+                Contact Support
+              </Link>
+            </div>
           </div>
         </div>
       </div>
@@ -84,4 +92,4 @@ const Delivery = () => {
   );
 };
 
-export default Delivery; 
+export default Delivery;

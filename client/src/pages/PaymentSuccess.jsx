@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
-import { assets } from '../assets/assets';
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -11,7 +10,7 @@ const PaymentSuccess = () => {
 
   useEffect(() => {
     const verifyPayment = async () => {
-      const orderId = searchParams.get('pid') || searchParams.get('oid'); // Support both pid and oid
+      const orderId = searchParams.get('pid') || searchParams.get('oid');
       const refId = searchParams.get('refId');
 
       if (!orderId || !refId) {
@@ -27,13 +26,12 @@ const PaymentSuccess = () => {
 
         if (data.success) {
           setStatus('success');
-          // Clear any local storage cart if needed
           localStorage.removeItem('cartItems');
-          
-          // Redirect to orders after 3 seconds
+
+          // Automated redirection after verification
           setTimeout(() => {
             navigate('/my-orders');
-          }, 3000);
+          }, 5000);
         } else {
           setStatus('failed');
         }
@@ -47,61 +45,101 @@ const PaymentSuccess = () => {
   }, [searchParams, axios, navigate]);
 
   return (
-    <div className="min-h-[60vh] flex flex-col items-center justify-center pt-20 px-4">
-      {status === 'verifying' && (
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <h2 className="text-2xl font-bold text-gray-800">Verifying Payment</h2>
-          <p className="text-gray-600 mt-2">Please wait while we confirm your payment...</p>
-        </div>
-      )}
+    <div className="min-h-[80vh] flex flex-col items-center justify-center px-6 relative overflow-hidden bg-slate-50">
+      {/* Background Accents */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -mr-64 -mt-64"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] -ml-64 -mb-64"></div>
 
-      {status === 'success' && (
-        <div className="text-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-            </svg>
+      <div className="relative z-10 w-full max-w-xl">
+        {status === 'verifying' && (
+          <div className="premium-card p-12 bg-white text-center shadow-2xl border-slate-100 rounded-[3rem]">
+            <div className="relative w-24 h-24 mx-auto mb-8">
+              <div className="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
+              <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+              <div className="absolute inset-4 bg-primary/10 rounded-full animate-pulse flex items-center justify-center">
+                <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+            </div>
+            <span className="text-primary font-black tracking-[0.4em] text-[10px] uppercase mb-4 inline-block">Payment Verification</span>
+            <h2 className="text-3xl font-black text-slate-900 uppercase tracking-tight italic mb-4">Verifying Payment</h2>
+            <p className="text-slate-500 font-medium leading-relaxed">
+              We are verifying your payment with the server. Please do not refresh the page...
+            </p>
           </div>
-          <h2 className="text-3xl font-bold text-green-600 mb-2">Payment Successful!</h2>
-          <p className="text-gray-600 mb-6">Your order has been placed successfully.</p>
-          <p className="text-sm text-gray-500">Redirecting to your orders...</p>
-          <button 
-            onClick={() => navigate('/my-orders')}
-            className="mt-6 px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition"
-          >
-            View Order
-          </button>
-        </div>
-      )}
+        )}
 
-      {status === 'failed' && (
-        <div className="text-center">
-          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
+        {status === 'success' && (
+          <div className="premium-card p-12 bg-white text-center shadow-2xl border-slate-100 rounded-[4rem]">
+            <div className="w-24 h-24 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-10 shadow-xl shadow-emerald-500/20 transform hover:scale-110 transition-transform duration-500">
+              <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <span className="text-emerald-500 font-black tracking-[0.4em] text-[10px] uppercase mb-4 inline-block">Order Confirmed</span>
+            <h2 className="text-4xl font-black text-slate-900 uppercase tracking-tighter italic mb-4">Payment Successful</h2>
+            <p className="text-slate-500 font-medium leading-relaxed mb-10">
+              Your order has been placed successfully and is being processed. Thank you for shopping with us!
+            </p>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Automatic Redirect</span>
+                <span className="text-xs font-black text-slate-900 uppercase tracking-widest">5 Seconds</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <Link
+                  to="/my-orders"
+                  className="px-6 py-4 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-primary transition-all shadow-xl active:scale-95 text-center"
+                >
+                  View My Orders
+                </Link>
+                <Link
+                  to="/"
+                  className="px-6 py-4 bg-slate-100 text-slate-900 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-200 transition-all active:scale-95 text-center"
+                >
+                  Return Home
+                </Link>
+              </div>
+            </div>
           </div>
-          <h2 className="text-3xl font-bold text-red-600 mb-2">Payment Failed</h2>
-          <p className="text-gray-600 mb-6">We couldn't verify your payment. Please contact support if you believe this is an error.</p>
-          <div className="flex gap-4 justify-center">
-            <button 
-              onClick={() => navigate('/cart')}
-              className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition"
-            >
-              Return to Cart
-            </button>
-            <button 
-              onClick={() => navigate('/contact')}
-              className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-            >
-              Contact Support
-            </button>
+        )}
+
+        {status === 'failed' && (
+          <div className="premium-card p-12 bg-white text-center shadow-2xl border-slate-100 rounded-[4rem]">
+            <div className="w-24 h-24 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-10 shadow-xl shadow-red-500/20 transform hover:rotate-12 transition-transform duration-500">
+              <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </div>
+            <span className="text-red-500 font-black tracking-[0.4em] text-[10px] uppercase mb-4 inline-block">Verification Error</span>
+            <h2 className="text-4xl font-black text-slate-900 uppercase tracking-tighter italic mb-4">Payment Failed</h2>
+            <p className="text-slate-500 font-medium leading-relaxed mb-10">
+              We were unable to verify your payment. Please try again or contact our support team if you need assistance.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/cart"
+                className="px-10 py-5 bg-primary text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-primary-dark transition-all shadow-xl active:scale-95 text-center flex-1"
+              >
+                Go to Cart
+              </Link>
+              <Link
+                to="/contact"
+                className="px-10 py-5 border border-slate-200 text-slate-900 rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-50 transition-all active:scale-95 text-center flex-1"
+              >
+                Contact Support
+              </Link>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
 
 export default PaymentSuccess;
+

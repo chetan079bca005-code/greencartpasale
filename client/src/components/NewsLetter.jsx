@@ -18,7 +18,7 @@ const NewsLetter = () => {
         }
 
         try {
-            const res = await fetch("http://localhost:4000/api/newsletter/subscribe", {
+            const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/newsletter/subscribe`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -46,41 +46,61 @@ const NewsLetter = () => {
     return (
         <div
             id="newsletter"
-            className="w-full px-6 py-24 bg-gradient-to-br from-blue-50 to-white flex flex-col items-center text-center shadow-inner"
+            className="w-full px-6 py-16 flex flex-col items-center text-center relative overflow-hidden"
         >
-            <h1 className="text-4xl md:text-6xl font-extrabold text-gray-800 mb-6">
-                Never Miss a Deal!
-            </h1>
-            <p className="text-gray-600 text-lg md:text-xl mb-10 max-w-2xl">
-                Get exclusive discounts, new arrivals, and special offers delivered straight to your inbox.
-            </p>
+            {/* Background Accents */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
 
-            <form
-                onSubmit={handleSubmit}
-                className="w-full max-w-2xl flex flex-col md:flex-row items-stretch gap-4"
-            >
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email address"
-                    className="flex-1 px-5 py-4 text-lg rounded-lg border border-gray-300 focus:ring-4 focus:ring-blue-300 focus:outline-none text-gray-800 shadow-sm"
-                    required
-                />
-                <button
-                    type="submit"
-                    className="bg-primary hover:bg-primary-dull transition-all text-white px-8 py-4 text-lg rounded-lg shadow-md font-semibold"
-                >
-                    Subscribe
-                </button>
-            </form>
-
-            {error && <p className="text-red-500 mt-3">{error}</p>}
-            {submitted && (
-                <p className="text-green-600 mt-4 text-lg font-medium">
-                    ✅ Thank you for subscribing!
+            <div className="relative z-10 max-w-4xl w-full">
+                <span className="text-primary font-bold tracking-[0.2em] text-xs uppercase mb-4 inline-block">Join our community</span>
+                <h1 className="text-4xl md:text-6xl font-black text-slate-800 dark:text-white mb-6 tracking-tight">
+                    Stay Fresh. <span className="text-primary">Never Miss a Deal.</span>
+                </h1>
+                <p className="text-slate-500 dark:text-slate-400 text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed">
+                    Get the latest harvests and exclusive offers delivered straight to your inbox every week.
                 </p>
-            )}
+
+                <form
+                    onSubmit={handleSubmit}
+                    className="w-full max-w-xl mx-auto relative group"
+                >
+                    <div className="flex flex-col md:flex-row items-center gap-3 p-2 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 focus-within:border-primary/50 transition-all">
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Your email address..."
+                            className="flex-1 px-4 py-3 text-slate-700 dark:text-white bg-transparent focus:outline-none w-full placeholder-slate-400"
+                            required
+                        />
+                        <button
+                            type="submit"
+                            className="w-full md:w-auto px-10 py-3.5 bg-primary text-white font-bold rounded-xl hover:bg-primary-dark transition-all shadow-lg shadow-primary/30 active:scale-95"
+                        >
+                            Subscribe Now
+                        </button>
+                    </div>
+                </form>
+
+                <div className="flex justify-center gap-8 mt-12 text-slate-500 dark:text-slate-400 font-medium text-sm">
+                    <div className="flex items-center gap-2">
+                        <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" /></svg>
+                        Weekly Updates
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" /></svg>
+                        Spam Free
+                    </div>
+                </div>
+
+                {error && <p className="text-red-500 mt-6 font-medium animate-shake">{error}</p>}
+                {submitted && (
+                    <div className="mt-8 p-4 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-2xl border border-green-100 dark:border-green-800 animate-fadeIn">
+                        ✅ Success! You're on the list.
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

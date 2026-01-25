@@ -1,6 +1,7 @@
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 import User from "../models/User.js"
+import Notification from "../models/Notification.js";
 import axios from "axios";
 import crypto from "crypto";
 import Stripe from 'stripe';
@@ -47,6 +48,8 @@ export const placeOrderEsewa = async (req, res) => {
             quantity: item.quantity
         }));
 
+        console.log("Creating eSewa order for user:", userId, "Items:", orderItems.length);
+
         const order = await Order.create({
             userId,
             items: orderItems,
@@ -56,8 +59,10 @@ export const placeOrderEsewa = async (req, res) => {
             isPaid: false
         });
 
+        console.log("eSewa order created:", order._id);
+
         // Check if we should use development mode
-        const devMode = process.env.USE_DEV_PAYMENT === 'true';
+        const devMode = false; // Force real eSewa interface for testing // process.env.USE_DEV_PAYMENT === 'true';
 
         // If in development mode, simulate a payment flow locally
         if (devMode) {
@@ -124,37 +129,47 @@ export const placeOrderEsewa = async (req, res) => {
             return res.send(simulationHtml);
         }
 
-        // For production: use the URL from environment variable
-        const paymentUrl = process.env.ESEWAPAYMENT_URL;
-        const merchantId = process.env.MERCHANT_ID;
-        const successUrl = process.env.SUCCESS_URL;
-        const failureUrl = process.env.FAILURE_URL;
-
-        if (!paymentUrl || !merchantId) {
-            throw new Error('eSewa configuration is missing. Please check your environment variables.');
+        // Create success/failure URLs with fallback
+        let baseUrl = origin;
+        if (!baseUrl || baseUrl === 'undefined') {
+            baseUrl = 'http://localhost:5173';
         }
 
+        const paymentUrl = (process.env.ESEWAPAYMENT_URL || "https://rc.esewa.com.np/api/epay/main/v2/form").trim();
+        const merchantId = (process.env.MERCHANT_ID || "EPAYTEST").trim();
+        const esewaSecret = (process.env.ESEWA_SECRET_KEY || '8gBm/:&EnhH.1/q').trim();
+        const successUrl = (process.env.SUCCESS_URL || `${baseUrl}/payment-success`).trim();
+        const failureUrl = (process.env.FAILURE_URL || `${baseUrl}/payment-failure`).trim();
+
+        if (!paymentUrl || !merchantId) {
+            // This case should be covered by fallbacks now
+            console.error("Critical: eSewa config missing even with fallbacks");
+        }
+
+        const transactionUuid = `${order._id}-${Date.now()}`;
+        const totalAmountFormatted = parseFloat(totalAmount).toFixed(2);
+
         // Create signature string
-        const signatureString = `total_amount=${parseFloat(totalAmount).toFixed(2)},transaction_uuid=${order._id}-${Date.now()},product_code=${merchantId}`;
+        const signatureString = `total_amount=${totalAmountFormatted},transaction_uuid=${transactionUuid},product_code=${merchantId}`;
 
         // Generate signature
-        const signature = crypto.createHmac('sha256', process.env.ESEWA_SECRET_KEY || '8gBm/:&EnhH.1/q')
+        const signature = crypto.createHmac('sha256', esewaSecret)
             .update(signatureString)
             .digest('base64');
 
         // Create parameters for eSewa
         const formData = {
-            amount: parseFloat(totalAmount).toFixed(2),
-            failure_url: failureUrl || `${origin}/payment-failure`,
+            amount: totalAmountFormatted,
+            failure_url: failureUrl || `${baseUrl}/payment-failure`,
             product_delivery_charge: "0",
             product_service_charge: "0",
             product_code: merchantId,
             signature: signature,
             signed_field_names: "total_amount,transaction_uuid,product_code",
-            success_url: successUrl || `${origin}/payment-success`,
+            success_url: successUrl || `${baseUrl}/payment-success`,
             tax_amount: "0",
-            total_amount: parseFloat(totalAmount).toFixed(2),
-            transaction_uuid: `${order._id}-${Date.now()}`
+            total_amount: totalAmountFormatted,
+            transaction_uuid: transactionUuid
         };
 
         // Create HTML form that will auto-submit to eSewa
@@ -236,14 +251,17 @@ export const placeOrderEsewa = async (req, res) => {
         `;
 
         // Log the details for debugging
-        console.log("eSewa payment details:", {
+        console.log("eSewa payment debug:", {
             url: paymentUrl,
             orderId: order._id.toString(),
-            amount: totalAmount,
-            merchantId: merchantId,
-            successUrl: formData.su,
-            failureUrl: formData.fu
+            merchantId: `"${merchantId}"`, // Log with quotes to see whitespace
+            signatureString: signatureString,
+            signature: signature,
+            transactionUuid: transactionUuid,
+            baseUrl: baseUrl
         });
+
+        console.log("eSewa form data:", JSON.stringify(formData, null, 2));
 
         // Send the HTML form as response
         res.header('Content-Type', 'text/html');
@@ -258,10 +276,12 @@ export const placeOrderEsewa = async (req, res) => {
 export const checkEsewaPaymentStatus = async (req, res) => {
     try {
         const { orderId, refId } = req.body;
+        console.log("Checking eSewa status for Order:", orderId, "RefId:", refId);
 
         // Find the order
         const order = await Order.findById(orderId);
         if (!order) {
+            console.error("Order not found during eSewa check:", orderId);
             return res.status(404).json({ success: false, message: "Order not found" });
         }
 
@@ -280,6 +300,7 @@ export const checkEsewaPaymentStatus = async (req, res) => {
             // Update order status
             order.isPaid = true;
             await order.save();
+            console.log("Order verified and marked as paid:", orderId);
 
             // Clear user's cart
             if (order.userId) {
@@ -503,17 +524,66 @@ export const updateOrderStatus = async (req, res) => {
         }
 
         // Find and update the order
-        const order = await Order.findById(orderId);
+        const order = await Order.findById(orderId).populate('items.product');
 
         if (!order) {
             return res.json({ success: false, message: "Order not found" });
         }
+
+        const previousStatus = order.status;
 
         // Update the status
         order.status = status;
         await order.save();
 
         console.log(`Order ${orderId} status updated to: ${status}`);
+
+        // Create notification for user when order status changes
+        if (previousStatus !== status && order.userId) {
+            let notificationTitle = '';
+            let notificationMessage = '';
+            let notificationType = 'order';
+
+            const orderIdShort = orderId.slice(-8).toUpperCase();
+            const productName = order.items[0]?.product?.name || 'your item';
+
+            switch (status) {
+                case 'Approved':
+                    notificationTitle = 'Order Approved! 🎉';
+                    notificationMessage = `Great news! Your order #${orderIdShort} for "${productName}" has been approved and is being prepared.`;
+                    break;
+                case 'Shipped':
+                    notificationTitle = 'Order Shipped! 🚚';
+                    notificationMessage = `Your order #${orderIdShort} is on its way! Track your delivery for "${productName}".`;
+                    break;
+                case 'Delivered':
+                    notificationTitle = 'Order Delivered! ✅';
+                    notificationMessage = `Your order #${orderIdShort} for "${productName}" has been delivered. Enjoy your purchase!`;
+                    break;
+                case 'Cancelled':
+                    notificationTitle = 'Order Cancelled ❌';
+                    notificationMessage = `Your order #${orderIdShort} for "${productName}" has been cancelled by the seller. If you have any questions, please contact support.`;
+                    notificationType = 'alert';
+                    break;
+                default:
+                    notificationTitle = `Order Update`;
+                    notificationMessage = `Your order #${orderIdShort} status has been updated to: ${status}`;
+            }
+
+            // Create notification
+            try {
+                await Notification.create({
+                    userId: order.userId,
+                    title: notificationTitle,
+                    message: notificationMessage,
+                    type: notificationType,
+                    orderId: orderId
+                });
+                console.log(`Notification created for user ${order.userId} - ${status}`);
+            } catch (notifError) {
+                console.error("Error creating notification:", notifError);
+            }
+        }
 
         return res.json({
             success: true,

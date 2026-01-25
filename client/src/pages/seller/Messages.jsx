@@ -39,25 +39,25 @@ const Messages = () => {
     }
 
     return (
-        <div className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll">
+        <div className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
             <div className="md:p-10 p-4 space-y-4">
-                <h2 className="text-lg font-medium">Contact Messages</h2>
+                <h2 className="text-lg font-medium text-gray-900 dark:text-white">Contact Messages</h2>
                 {messages.length === 0 ? (
-                    <p className="text-center text-gray-500">No messages found</p>
+                    <p className="text-center text-gray-500 dark:text-gray-400">No messages found</p>
                 ) : (
                     messages.map((message, index) => (
-                        <div key={message._id || index} className="flex flex-col gap-3 p-5 max-w-4xl rounded-md border border-gray-300">
+                        <div key={message._id || index} className="flex flex-col gap-3 p-5 max-w-4xl rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-800 transition-colors duration-300">
                             <div className="flex justify-between items-start">
                                 <div>
-                                    <h3 className="font-medium text-lg">{message.name}</h3>
-                                    <p className="text-gray-600">{message.email}</p>
+                                    <h3 className="font-medium text-lg text-gray-900 dark:text-white">{message.name}</h3>
+                                    <p className="text-gray-600 dark:text-gray-400">{message.email}</p>
                                 </div>
-                                <span className="text-sm text-gray-500">
+                                <span className="text-sm text-gray-500 dark:text-gray-400">
                                     {new Date(message.createdAt).toLocaleDateString()}
                                 </span>
                             </div>
-                            <div className="bg-gray-50 p-4 rounded-md">
-                                <p className="text-gray-700 whitespace-pre-wrap">{message.message}</p>
+                            <div className="bg-gray-50 dark:bg-slate-900 p-4 rounded-md border border-gray-200 dark:border-gray-700">
+                                <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{message.message}</p>
                             </div>
                         </div>
                     ))

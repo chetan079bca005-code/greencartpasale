@@ -1,95 +1,103 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Returns = () => {
   const returnPolicy = [
     {
       title: "30-Day Return Policy",
-      description: "We offer a 30-day return policy for most items. Products must be unused and in their original packaging with all tags and labels attached."
+      description: "We offer a 30-day return window for most products. Items must be in their original condition and packaging with all tags attached."
     },
     {
-      title: "Return Process",
-      description: "To initiate a return, please contact our customer service team. You'll receive a return authorization number and shipping instructions. Returns without authorization may not be accepted."
+      title: "Easy Return Process",
+      description: "To start a return, simply contact our support team. Please ensure you have your order number ready for faster processing."
     },
     {
-      title: "Refund Timeline",
-      description: "Once we receive your return, it will be inspected within 2-3 business days. If approved, your refund will be processed within 5-7 business days to your original payment method."
+      title: "Fast Refunds",
+      description: "Once we receive and inspect your return (within 2-3 days), your refund will be processed to your original payment method within 5-7 business days."
     }
   ];
 
   const nonReturnableItems = [
-    "Personalized or custom-made items",
+    "Personalized or customized items",
     "Items marked as 'Final Sale'",
-    "Items without original packaging or tags",
+    "Items missing original packaging",
     "Used or damaged items",
-    "Items purchased more than 30 days ago"
+    "Returns requested after 30 days"
   ];
 
   return (
-    <div className="pt-24 pb-10">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Return & Refund Policy</h1>
-        
-        <div className="space-y-8">
+    <div className="pb-24">
+      {/* Header Section */}
+      <div className="bg-slate-900 py-16 px-6 text-center relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
+        <div className="relative z-10 max-w-4xl mx-auto">
+          <span className="text-primary font-bold tracking-[0.3em] text-[10px] uppercase mb-4 inline-block">Customer Satisfaction</span>
+          <h1 className="text-3xl md:text-6xl font-black text-white mb-4 uppercase tracking-tighter italic">Returns & Refunds</h1>
+          <p className="text-slate-400 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed font-medium">
+            Learn more about our return policy, refund process, and how to return an item.
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 -mt-16 relative z-20">
+        <div className="space-y-12">
           {/* Return Policy Overview */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {returnPolicy.map((policy, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-sm p-6">
-                <h3 className="text-xl font-semibold mb-3">{policy.title}</h3>
-                <p className="text-gray-600">{policy.description}</p>
+              <div key={index} className="premium-card p-8 bg-white group hover:bg-slate-900 transition-all duration-500 border-slate-100">
+                <h3 className="text-xl font-black text-slate-800 mb-4 uppercase tracking-tight group-hover:text-white transition-colors">{policy.title}</h3>
+                <p className="text-slate-500 font-medium text-sm leading-relaxed group-hover:text-slate-400 transition-colors">{policy.description}</p>
               </div>
             ))}
           </div>
 
-          {/* Non-Returnable Items */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-semibold mb-4">Non-Returnable Items</h2>
-            <ul className="space-y-2">
-              {nonReturnableItems.map((item, index) => (
-                <li key={index} className="flex items-start gap-2 text-gray-600">
-                  <svg className="w-5 h-5 text-primary mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            {/* Non-Returnable Items */}
+            <div className="premium-card p-10 bg-white border-slate-100">
+              <h2 className="text-2xl font-black text-slate-900 mb-8 uppercase tracking-tight italic">Non-Returnable Items</h2>
+              <ul className="space-y-4">
+                {nonReturnableItems.map((item, index) => (
+                  <li key={index} className="flex items-start gap-4 text-slate-500 font-medium">
+                    <div className="w-5 h-5 bg-red-500/10 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
+                      <svg className="w-3 h-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </div>
+                    <span className="text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Return Instructions */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-semibold mb-4">Return Instructions</h2>
-            <ol className="space-y-4 text-gray-600">
-              <li className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full">1</span>
-                <span>Contact our customer service team to initiate the return process.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full">2</span>
-                <span>Pack the item securely in its original packaging with all tags and labels attached.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full">3</span>
-                <span>Include the return authorization number on the outside of the package.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full">4</span>
-                <span>Ship the package using a trackable shipping method.</span>
-              </li>
-            </ol>
+            {/* Return Instructions */}
+            <div className="premium-card p-10 bg-white border-slate-100">
+              <h2 className="text-2xl font-black text-slate-900 mb-8 uppercase tracking-tight italic">How to Return</h2>
+              <div className="space-y-8">
+                {[
+                  "Contact our support team to request a return.",
+                  "Pack the item securely in its original packaging.",
+                  "Include your order number clearly on the package.",
+                  "Ship the item back to us using a trackable shipping method."
+                ].map((text, i) => (
+                  <div key={i} className="flex items-start gap-5">
+                    <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-slate-900 text-white font-black rounded-lg text-xs italic">{i + 1}</span>
+                    <p className="text-slate-500 font-medium text-sm leading-relaxed pt-1.5">{text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Contact Support */}
-          <div className="bg-primary/5 rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">Need Help?</h2>
-            <p className="text-gray-600 mb-4">
-              If you have any questions about our return policy or need assistance with a return, our customer support team is here to help.
+          <div className="mt-12 p-12 bg-primary rounded-[3rem] text-center shadow-2xl shadow-primary/20">
+            <h2 className="text-2xl font-black text-white mb-4 uppercase tracking-tight italic">Need More Help?</h2>
+            <p className="text-white/80 max-w-xl mx-auto mb-10 font-medium text-sm">
+              If you have any questions about your return or need assistance with the process, please contact our support team.
             </p>
-            <a
-              href="/contact"
-              className="inline-block px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dull transition-colors duration-300"
+            <Link
+              to="/contact"
+              className="inline-block px-12 py-5 bg-white text-slate-950 font-black rounded-2xl hover:scale-105 transition-all shadow-xl active:scale-95 uppercase tracking-widest text-[10px]"
             >
               Contact Support
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -97,4 +105,4 @@ const Returns = () => {
   );
 };
 
-export default Returns; 
+export default Returns;

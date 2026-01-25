@@ -17,11 +17,12 @@ export const validateRegistration = [
 
     // Password validation
     body('password')
-        .trim()
         .notEmpty().withMessage('Password is required')
         .isLength({ min: 8 }).withMessage('Password must be at least 8 characters long')
-        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
-        .withMessage('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'),
+        .matches(/(?=.*[a-z])/).withMessage('Password must contain at least one lowercase letter')
+        .matches(/(?=.*[A-Z])/).withMessage('Password must contain at least one uppercase letter')
+        .matches(/(?=.*\d)/).withMessage('Password must contain at least one number')
+        .matches(/(?=.*[@$!%*?&])/).withMessage('Password must contain at least one special character (@$!%*?&)'),
 
     // Validation result middleware
     (req, res, next) => {

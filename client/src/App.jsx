@@ -29,18 +29,21 @@ import Shop from './pages/Shop'
 import About from './pages/About'
 import PaymentSuccess from './pages/PaymentSuccess'
 import PaymentFailure from './pages/PaymentFailure'
+import Settings from './pages/Settings'
+import Notifications from './pages/Notifications'
+import WhatsAppButton from './components/WhatsAppButton'
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller")
   const { showUserLogin, isSeller } = useAppContext()
 
   return (
-    <div className="text-default min-h-screen text-gray-700 bg-white">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white transition-colors duration-500">
       {!isSellerPath && <Navbar />}
       {showUserLogin && <Login />}
       <Toaster />
 
-      <div className={`flex-grow ${isSellerPath ? "" : "px-6 md:px-16 lg:px-24 xl:px-32"}`}>
+      <div className={`flex-grow ${isSellerPath ? "" : ""}`}>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/shop' element={<Shop />} />
@@ -52,6 +55,8 @@ const App = () => {
           <Route path='/add-address' element={<AddAddress />} />
           <Route path='/my-orders' element={<MyOrders />} />
           <Route path='/loader' element={<Loading />} />
+          <Route path='/settings' element={<Settings />} />
+          <Route path='/notifications' element={<Notifications />} />
 
           {/* Footer Links Routes */}
           <Route path='/contact' element={<Contact />} />
@@ -74,6 +79,7 @@ const App = () => {
       </div>
 
       {!isSellerPath && <Footer />}
+      {!isSellerPath && <WhatsAppButton />}
     </div>
   )
 }

@@ -13,6 +13,11 @@ import orderRouter from "./routes/orderRoute.js";
 import { stripeWebhooks } from "./controllers/orderController.js";
 import newsletterRouter from "./routes/newsletterRoute.js";
 import contactRouter from "./routes/contact.js";
+import recommendationRouter from "./routes/recommendationRoutes.js";
+import notificationRouter from "./routes/notificationRoute.js";
+import aiRouter from "./routes/aiRoutes.js";
+
+
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -20,7 +25,7 @@ const port = process.env.PORT || 4000;
 await connectDB();
 await connectCloudinary();
 
-const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['http://localhost:5174', 'http://localhost:5173'];
 
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 
@@ -42,6 +47,11 @@ app.use('/api/address', addressRouter);
 app.use('/api/order', orderRouter);
 app.use('/api/newsletter', newsletterRouter);
 app.use('/api/contact', contactRouter);
+app.use('/api/recommendations', recommendationRouter);
+app.use('/api/notification', notificationRouter);
+app.use('/api/ai', aiRouter);
+
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

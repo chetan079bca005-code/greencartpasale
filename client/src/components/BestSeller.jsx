@@ -8,21 +8,24 @@ const BestSeller = () => {
     const bestSellers = products.filter(product => product.inStock === true).slice(0, 5);
 
     return (
-        <div className="py-12 bg-gradient-to-r from-gray-50 to-gray-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-8">Best Sellers</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div className="py-10">
+            <div className="max-w-7xl mx-auto container px-4">
+                <div className="text-center mb-12">
+                    <span className="text-primary font-bold tracking-[0.4em] text-[10px] uppercase bg-white/10 px-3 py-1 rounded-full">Elite Tier</span>
+                    <h2 className="text-3xl md:text-5xl font-black text-white mt-6 tracking-tight uppercase italic">Best Sellers</h2>
+                    <div className="flex justify-center mt-6">
+                        <div className="w-12 h-1 bg-primary rounded-full"></div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     {bestSellers.map((product) => (
-                        <div 
-                            key={product._id} 
-                            className="transform hover:-translate-y-2 transition-all duration-300 bg-white rounded-lg shadow-md hover:shadow-xl p-4"
-                        >
-                            <ProductCard product={product} />
-                        </div>
+                        <ProductCard key={product._id} product={product} />
                     ))}
                 </div>
             </div>
         </div>
+
     )
 }
 

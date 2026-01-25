@@ -1,4 +1,4 @@
-import {v2 as cloudinary} from "cloudinary"
+import { v2 as cloudinary } from "cloudinary"
 import Product from "../models/Product.js"
 import fs from 'fs/promises'
 
@@ -10,7 +10,7 @@ export const addProduct = async (req, res) => {
         }
 
         let productData = JSON.parse(req.body.productData);
-        
+
         // Upload images to Cloudinary
         let imagesUrl = await Promise.all(
             req.files.map(async (file) => {
@@ -46,13 +46,28 @@ export const addProduct = async (req, res) => {
 //get product : /api/product/list
 export const productList = async (req, res) => {
     try {
-        const products = await Product.find({});
+        const { search } = req.query;
+        let query = {};
+
+        if (search) {
+            // Advanced search with weighted regex matching
+            query = {
+                $or: [
+                    { name: { $regex: search, $options: 'i' } },
+                    { category: { $regex: search, $options: 'i' } },
+                    { description: { $elemMatch: { $regex: search, $options: 'i' } } }
+                ]
+            };
+        }
+
+        const products = await Product.find(query).sort({ createdAt: -1 }).limit(1000);
         res.json({ success: true, products });
     } catch (error) {
         console.error('Error in productList:', error);
         res.json({ success: false, message: error.message });
     }
 };
+
 
 //get single product : /api/product/id
 export const productById = async (req, res) => {
@@ -97,7 +112,7 @@ export const updateProduct = async (req, res) => {
 
         // If new images are uploaded, process them
         if (req.files && req.files.length > 0) {
-            imagesUrl = await Promise.all(
+            const newImages = await Promise.all(
                 req.files.map(async (file) => {
                     try {
                         const result = await cloudinary.uploader.upload(file.path, {
@@ -112,6 +127,7 @@ export const updateProduct = async (req, res) => {
                     }
                 })
             );
+            imagesUrl = [...(imagesUrl || []), ...newImages];
         }
 
         const product = await Product.findByIdAndUpdate(
@@ -139,7 +155,7 @@ export const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
         const product = await Product.findByIdAndDelete(id);
-        
+
         if (!product) {
             return res.json({ success: false, message: 'Product not found' });
         }

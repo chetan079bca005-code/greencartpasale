@@ -53,8 +53,8 @@ const MainBanner = () => {
   };
 
   return (
-    <div 
-      className="relative h-[600px] overflow-hidden"
+    <div
+      className="relative h-[450px] md:h-[600px] overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -62,35 +62,46 @@ const MainBanner = () => {
       {slides.map((slide, index) => (
         <div
           key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === currentSlide ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`absolute inset-0 transition-opacity duration-1000 ${index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
         >
-          <div className="relative h-full">
+          <div className="relative h-full group">
             <img
               src={slide.image}
               alt={slide.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transform scale-105 group-hover:scale-100 transition-transform duration-10000 linear"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/40 to-transparent" />
+
             <div className="absolute inset-0 flex items-center">
-              <div className="container mx-auto px-6 md:px-16 lg:px-24 xl:px-32">
-                <div className="max-w-2xl text-white">
-                  <h2 className="text-4xl md:text-5xl font-bold mb-4 animate-fadeIn">
-                    {slide.title}
+              <div className="container mx-auto px-10 md:px-20">
+                <div className="max-w-2xl">
+                  <div className="inline-block px-4 py-1.5 rounded-full bg-primary/20 text-primary border border-primary/30 text-xs font-bold tracking-widest uppercase mb-6 animate-fadeIn">
+                    Premium Quality
+                  </div>
+                  <h2 className="text-4xl md:text-6xl font-extrabold mb-3 text-white leading-tight animate-fadeIn">
+                    {slide.title} <span className="text-primary italic font-light">{slide.subtitle}</span>
                   </h2>
-                  <h3 className="text-2xl md:text-3xl font-medium mb-6 text-primary animate-fadeIn animation-delay-200">
-                    {slide.subtitle}
-                  </h3>
-                  <p className="text-lg mb-8 animate-fadeIn animation-delay-400">
+                  <p className="text-sm md:text-lg mb-6 text-slate-300 leading-relaxed max-w-md animate-fadeIn animation-delay-400">
                     {slide.description}
                   </p>
-                  <button
-                    onClick={() => navigate(slide.buttonLink)}
-                    className="bg-primary hover:bg-primary-dull text-white px-8 py-3 rounded-full transform hover:scale-105 transition-all duration-300 animate-fadeIn animation-delay-600"
-                  >
-                    {slide.buttonText}
-                  </button>
+                  <div className="flex flex-wrap gap-4 animate-fadeIn animation-delay-600">
+                    <button
+                      onClick={() => navigate(slide.buttonLink)}
+                      className="btn-primary-premium flex items-center gap-2"
+                    >
+                      {slide.buttonText}
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => navigate('/about')}
+                      className="px-8 py-3 rounded-xl font-semibold border-2 border-white/30 text-white hover:bg-white hover:text-slate-900 transition-all duration-300 backdrop-blur-sm"
+                    >
+                      Learn More
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -98,37 +109,30 @@ const MainBanner = () => {
         </div>
       ))}
 
-      {/* Navigation Arrows */}
-      <button
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full transform hover:scale-110 transition-all duration-300"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-      <button
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full transform hover:scale-110 transition-all duration-300"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-
-      {/* Dots */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide ? 'bg-primary scale-125' : 'bg-white/50 hover:bg-white'
-            }`}
-          />
-        ))}
+      {/* Navigation Arrows - Glass Style */}
+      <div className="absolute bottom-10 right-10 flex gap-4 z-20">
+        <button
+          onClick={prevSlide}
+          className="w-12 h-12 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all duration-300 shadow-lg"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button
+          onClick={nextSlide}
+          className="w-12 h-12 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all duration-300 shadow-lg"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
+
+      {/* Aesthetic Bottom Edge */}
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-slate-950/50 to-transparent pointer-events-none" />
     </div>
+
   );
 };
 

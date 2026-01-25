@@ -49,7 +49,7 @@ const EditProduct = () => {
 
             const formData = new FormData();
             formData.append('productData', JSON.stringify(productData));
-            
+
             // Only append new images if they exist
             for (let i = 0; i < files.length; i++) {
                 if (files[i]) {
@@ -100,24 +100,45 @@ const EditProduct = () => {
                             </div>
                         ))}
                         {Array(4 - existingImages.length).fill('').map((_, index) => (
-                            <label key={index} htmlFor={`image${index}`}>
+                            <label key={`new-${index}`} htmlFor={`image${index}`} className="relative cursor-pointer">
                                 <input
                                     type="file"
                                     id={`image${index}`}
                                     hidden
+                                    accept="image/*"
                                     onChange={(e) => {
-                                        const updatedFiles = [...files];
-                                        updatedFiles[index] = e.target.files[0];
-                                        setFiles(updatedFiles);
+                                        if (e.target.files && e.target.files[0]) {
+                                            const updatedFiles = [...files];
+                                            updatedFiles[index] = e.target.files[0];
+                                            setFiles(updatedFiles);
+                                        }
                                     }}
                                 />
                                 <img
-                                    className="max-w-24 cursor-pointer"
-                                    src={assets.upload_area}
-                                    alt="uploadArea"
+                                    className="max-w-24 border border-gray-300 rounded p-2 hover:border-primary transition-colors"
+                                    src={files[index] ? URL.createObjectURL(files[index]) : assets.upload_area}
+                                    alt={files[index] ? `New image ${index + 1}` : 'Upload area'}
                                     width={100}
                                     height={100}
                                 />
+                                {files[index] && (
+                                    <button
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            const updatedFiles = [...files];
+                                            updatedFiles[index] = null;
+                                            setFiles(updatedFiles);
+                                            // Reset the file input
+                                            const input = document.getElementById(`image${index}`);
+                                            if (input) input.value = '';
+                                        }}
+                                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                                    >
+                                        ×
+                                    </button>
+                                )}
                             </label>
                         ))}
                     </div>

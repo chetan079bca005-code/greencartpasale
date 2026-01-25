@@ -69,7 +69,7 @@ const Login = () => {
       default:
         break;
     }
-    
+
     // Validate field on change
     const error = validateField(name, value);
     setErrors(prev => ({
@@ -105,7 +105,7 @@ const Login = () => {
         email,
         password
       });
-      
+
       if (data.success) {
         toast.success(data.message);
         navigate('/');
@@ -128,15 +128,15 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
       <Toaster position="top-center" />
       <div className='fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center bg-black/50 backdrop-blur-sm'>
-        <div className="relative w-full max-w-md p-6 mx-auto bg-white rounded-xl shadow-2xl">
+        <div className="relative w-full max-w-md p-6 mx-auto bg-white dark:bg-slate-800 rounded-xl shadow-2xl transition-colors duration-300">
           {/* Close Button */}
           <button
             type="button"
             onClick={() => setShowUserLogin(false)}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -144,10 +144,10 @@ const Login = () => {
           </button>
 
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
               <span className="text-primary">User</span> {state === "login" ? "Login" : "Sign Up"}
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               {state === "login" ? "Welcome back! Please enter your details." : "Create your account to get started."}
             </p>
           </div>
@@ -155,16 +155,15 @@ const Login = () => {
           <form onSubmit={onSubmitHandler} className="space-y-6">
             {state === "register" && (
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
                 <input
                   id="name"
                   name="name"
                   type="text"
                   value={name}
                   onChange={handleChange}
-                  className={`mt-1 block w-full px-3 py-2 border ${
-                    errors.name ? 'border-red-300' : 'border-gray-300'
-                  } rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm`}
+                  className={`mt-1 block w-full px-3 py-2 border ${errors.name ? 'border-red-300' : 'border-gray-300 dark:border-gray-600'
+                    } rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-400`}
                   placeholder="Enter your name"
                 />
                 {errors.name && (
@@ -174,16 +173,15 @@ const Login = () => {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
               <input
                 id="email"
                 name="email"
                 type="email"
                 value={email}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-3 py-2 border ${
-                  errors.email ? 'border-red-300' : 'border-gray-300'
-                } rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm`}
+                className={`mt-1 block w-full px-3 py-2 border ${errors.email ? 'border-red-300' : 'border-gray-300 dark:border-gray-600'
+                  } rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-400`}
                 placeholder="Enter your email"
               />
               {errors.email && (
@@ -192,16 +190,15 @@ const Login = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
               <input
                 id="password"
                 name="password"
                 type="password"
                 value={password}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-3 py-2 border ${
-                  errors.password ? 'border-red-300' : 'border-gray-300'
-                } rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm`}
+                className={`mt-1 block w-full px-3 py-2 border ${errors.password ? 'border-red-300' : 'border-gray-300 dark:border-gray-600'
+                  } rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-400`}
                 placeholder="Enter your password"
               />
               {errors.password && (
