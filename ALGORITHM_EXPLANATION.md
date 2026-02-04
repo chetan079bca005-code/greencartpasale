@@ -1,4 +1,4 @@
-# Complete Algorithm Explanation Guide - GreenCart Project
+<!-- # Complete Algorithm Explanation Guide - GreenCart Project
 
 This document provides a comprehensive explanation of the recommendation algorithms used in the GreenCart project, including how they work, what they mean, and where they're implemented.
 
@@ -735,4 +735,4 @@ By studying this project, you learn:
 - [COLLABORATIVE_FILTERING.md](COLLABORATIVE_FILTERING.md) - Detailed CF explanation
 - [ALGORITHMS.md](ALGORITHMS.md) - All algorithms in GreenCart
 - [README.md](README.md) - Project overview
-
+ -->
