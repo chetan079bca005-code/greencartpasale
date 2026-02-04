@@ -1,4 +1,4 @@
-# Collaborative Filtering in GreenCart
+<!-- # Collaborative Filtering in GreenCart
 
 This document provides a detailed explanation of the **Collaborative Filtering (CF)** algorithm implemented in the GreenCart project. It explains how the algorithm works, where to find the code, and how it is applied in the application.
 
@@ -192,4 +192,4 @@ Here is the exact code for the User-Based recommendation logic from `server/util
             .sort((a, b) => b.score - a.score) // Highest score first
             .slice(0, this.maxRecommendations); // Top N
     }
-```
+``` -->
