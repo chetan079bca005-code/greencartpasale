@@ -1,4 +1,4 @@
-# 🤖 AI & Intelligent Features
+<!-- # 🤖 AI & Intelligent Features
 
 GreenCart now includes advanced AI methodologies to enhance scalability, pricing strategy, and inventory management.
 
@@ -39,4 +39,4 @@ GreenCart now includes advanced AI methodologies to enhance scalability, pricing
 1.  **Recommendations:** Create a new product with a detailed description similar to an existing one. Visit its page; you should see recommendations immediately.
 2.  **AI Insights:** Access the new endpoints (Admin use):
     *   `http://localhost:4000/api/ai/pricing-suggestions`
-    *   `http://localhost:4000/api/ai/inventory-forecast`
+    *   `http://localhost:4000/api/ai/inventory-forecast` -->
