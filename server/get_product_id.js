@@ -21,3 +21,4 @@ const getProductId = async () => {
 };
 
 getProductId();
+// 
