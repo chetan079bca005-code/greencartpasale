@@ -1,4 +1,4 @@
-# Seller Product Recommendation Feature
+<!-- # Seller Product Recommendation Feature
 
 ## Overview
 The Seller Product Recommendation feature allows sellers to proactively suggest products to customers based on their previous orders. This recommendation appears as an **In-App Notification** and is also sent via **Email**.
@@ -54,4 +54,4 @@ node test_recommendation_v2.js
 
 ## Future Enhancements
 -   **AI Suggestions:** Pre-fill the product selection modal with AI-generated suggestions (using the Content-Based Filtering module).
--   **Analytics:** Track click-through rates on recommendations.
+-   **Analytics:** Track click-through rates on recommendations. -->
