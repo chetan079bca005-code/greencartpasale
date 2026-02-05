@@ -1,4 +1,4 @@
-# GreenCart Pasale - AI-Powered E-Commerce Platform
+<!-- # GreenCart Pasale - AI-Powered E-Commerce Platform
 
 Welcome to **GreenCart Pasale**, a modern, premium e-commerce solution built with the MERN stack (MongoDB, Express, React, Node.js). This project features **Collaborative Filtering** algorithms to provide personalized product recommendations.
 
@@ -341,4 +341,4 @@ This project was upgraded from a simple CRUD application with **Association Mini
 
 ## 📝 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. -->
