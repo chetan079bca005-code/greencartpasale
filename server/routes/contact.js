@@ -38,4 +38,15 @@ router.get('/messages', isSeller, async (req, res) => {
     }
 });
 
+// Delete a message (seller only)
+router.delete('/messages/:id', isSeller, async (req, res) => {
+    try {
+        await Contact.findByIdAndDelete(req.params.id);
+        res.json({ success: true, message: 'Message deleted' });
+    } catch (error) {
+        console.error('Error deleting message:', error);
+        res.status(500).json({ success: false, message: 'Error deleting message' });
+    }
+});
+
 export default router; 

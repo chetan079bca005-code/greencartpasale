@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
-import { assets } from '../assets/assets';
 
 const ProductCard = ({ product }) => {
     const navigate = useNavigate();
@@ -13,17 +12,27 @@ const ProductCard = ({ product }) => {
     } = useAppContext();
 
     const getUnitDisplay = (product) => {
-        switch (product.category.toLowerCase()) {
+        // Use weight/unit from new fields if available
+        if (product.weight && product.unit && product.unit !== 'piece') {
+            return `${product.weight} ${product.unit}`;
+        }
+        if (product.weight) return product.weight;
+
+        switch ((product.category || '').toLowerCase()) {
             case 'vegetables':
             case 'fruits':
-                return product.weight ? `${product.weight} kg` : 'per kg';
+                return 'per kg';
             case 'grain':
-                return product.weight ? `${product.weight} kg` : 'per kg';
+            case 'grains':
+                return 'per kg';
             case 'dairy products':
-                return product.volume ? `${product.volume} L` : 'per liter';
+            case 'dairy':
+                return 'per liter';
             case 'cold drinks':
-                return product.volume ? `${product.volume} L` : 'per bottle';
+            case 'drinks':
+                return 'per bottle';
             case 'instant food':
+            case 'instant':
                 return 'per packet';
             default:
                 return 'per piece';
@@ -33,6 +42,7 @@ const ProductCard = ({ product }) => {
     if (!product) return null;
 
     const categoryPath = (product.category || '').toLowerCase().replace(/\s+/g, '');
+    const discountPct = product.price > product.offerPrice ? Math.round(((product.price - product.offerPrice) / product.price) * 100) : 0;
 
     return (
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-2 group flex flex-col h-full hover:shadow-lg transition-all duration-300 border border-slate-200 dark:border-slate-700">
@@ -49,11 +59,21 @@ const ProductCard = ({ product }) => {
                     className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
 
-                {product.price > product.offerPrice && (
+                {discountPct > 0 && (
                     <div className="absolute top-1.5 left-1.5 bg-red-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded tracking-tighter">
-                        -{Math.round(((product.price - product.offerPrice) / product.price) * 100)}%
+                        -{discountPct}%
                     </div>
                 )}
+
+                {/* Organic & Featured badges */}
+                <div className="absolute top-1.5 right-1.5 flex flex-col gap-1">
+                    {product.isOrganic && (
+                        <span className="bg-green-500 text-white text-[7px] font-bold px-1.5 py-0.5 rounded-md flex items-center gap-0.5">🌿</span>
+                    )}
+                    {product.isFeatured && (
+                        <span className="bg-amber-500 text-white text-[7px] font-bold px-1.5 py-0.5 rounded-md flex items-center gap-0.5">⭐</span>
+                    )}
+                </div>
             </div>
 
             <div className="flex flex-col flex-grow px-1">
@@ -62,10 +82,14 @@ const ProductCard = ({ product }) => {
                         navigate(`/products/${categoryPath}/${product._id}`);
                         window.scrollTo(0, 0);
                     }}
-                    className="font-bold text-slate-800 dark:text-white group-hover:text-primary transition-colors text-xs line-clamp-1 cursor-pointer leading-tight mb-1"
+                    className="font-bold text-slate-800 dark:text-white group-hover:text-primary transition-colors text-xs line-clamp-1 cursor-pointer leading-tight mb-0.5"
                 >
                     {product.name}
                 </h3>
+
+                {product.brand && (
+                    <p className="text-[9px] text-slate-400 mb-0.5">by {product.brand}</p>
+                )}
 
                 <p className="text-[10px] font-medium text-slate-400 mb-2">{getUnitDisplay(product)}</p>
 
@@ -102,13 +126,7 @@ const ProductCard = ({ product }) => {
                 </div>
             </div>
         </div>
-                    
-                
-            
-        
-
     );
 };
-
 
 export default ProductCard;

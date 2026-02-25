@@ -13,11 +13,15 @@ import AddAddress from './pages/AddAddress'
 import MyOrders from './pages/MyOrders';
 import SellerLogin from './components/seller/SellerLogin'
 import SellerLayout from './pages/seller/SellerLayout'
+import Dashboard from './pages/seller/Dashboard'
 import AddProduct from './pages/seller/AddProduct'
 import ProductList from './pages/seller/ProductList'
 import EditProduct from './pages/seller/EditProduct'
 import Orders from './pages/seller/Orders'
 import Messages from './pages/seller/Messages'
+import Customers from './pages/seller/Customers'
+import Subscribers from './pages/seller/Subscribers'
+import AIInsights from './pages/seller/AIInsights'
 import Loading from './components/Loading'
 import Contact from './pages/Contact'
 import FAQs from './pages/FAQs'
@@ -69,11 +73,15 @@ const App = () => {
           <Route path='/payment-failure' element={<PaymentFailure />} />
 
           <Route path='/seller' element={isSeller ? <SellerLayout /> : <SellerLogin />}>
-            <Route index element={isSeller ? <AddProduct /> : null} />
+            <Route index element={isSeller ? <Dashboard /> : null} />
+            <Route path='add-product' element={<AddProduct />} />
             <Route path='product-list' element={<ProductList />} />
             <Route path='edit-product' element={<EditProduct />} />
             <Route path='orders' element={<Orders />} />
             <Route path='messages' element={<Messages />} />
+            <Route path='customers' element={<Customers />} />
+            <Route path='subscribers' element={<Subscribers />} />
+            <Route path='ai-insights' element={<AIInsights />} />
           </Route>
         </Routes>
       </div>

@@ -133,12 +133,31 @@ const ProductDetails = () => {
         {/* Right: Info */}
         <div className="lg:col-span-5 flex flex-col justify-center">
           <div className="mb-8">
-            <span className="inline-block px-4 py-1.5 bg-primary/10 dark:bg-primary/20 text-primary text-[10px] font-black uppercase tracking-widest rounded-full mb-6 border border-primary/10">
-              {product.category}
-            </span>
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white leading-[1.1] mb-6 tracking-tight uppercase italic decoration-primary/20 decoration-8 underline-offset-8">
+            {/* Badges */}
+            <div className="flex flex-wrap items-center gap-2 mb-4">
+              <span className="inline-block px-4 py-1.5 bg-primary/10 dark:bg-primary/20 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/10">
+                {product.category}
+              </span>
+              {product.isOrganic && (
+                <span className="inline-block px-3 py-1.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] font-black uppercase tracking-widest rounded-full border border-green-200 dark:border-green-800">
+                  🌿 Organic
+                </span>
+              )}
+              {product.isFeatured && (
+                <span className="inline-block px-3 py-1.5 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 text-[10px] font-black uppercase tracking-widest rounded-full border border-amber-200 dark:border-amber-800">
+                  ⭐ Featured
+                </span>
+              )}
+            </div>
+
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white leading-[1.1] mb-4 tracking-tight">
               {product.name}
             </h1>
+
+            {product.brand && (
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">by <span className="font-semibold text-slate-700 dark:text-slate-300">{product.brand}</span></p>
+            )}
+
             <div className="flex items-center gap-4 text-[10px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-widest">
               <div className="flex items-center gap-1.5 text-amber-500">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
@@ -146,6 +165,12 @@ const ProductDetails = () => {
               </div>
               <span className="w-1 h-1 bg-slate-200 dark:bg-slate-700 rounded-full"></span>
               <span className="text-primary">Verified Fresh</span>
+              {product.origin && (
+                <>
+                  <span className="w-1 h-1 bg-slate-200 dark:bg-slate-700 rounded-full"></span>
+                  <span>📍 {product.origin}</span>
+                </>
+              )}
             </div>
           </div>
 
@@ -155,11 +180,110 @@ const ProductDetails = () => {
               {product.price > product.offerPrice && (
                 <span className="text-xl text-slate-300 dark:text-slate-700 line-through font-bold">{currency}{product.price}</span>
               )}
+              {product.price > product.offerPrice && (
+                <span className="text-xs font-bold text-green-600 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded-lg">
+                  {Math.round(((product.price - product.offerPrice) / product.price) * 100)}% OFF
+                </span>
+              )}
             </div>
+            {product.weight && (
+              <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                {product.weight}{product.unit && product.unit !== 'piece' ? ` ${product.unit}` : ''} per unit
+              </p>
+            )}
             <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em]">Price updated based on daily market</p>
           </div>
 
           <div className="space-y-10">
+            {/* Product Info Cards */}
+            {(product.origin || product.shelfLife || product.weight) && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {product.weight && (
+                  <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-700">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Weight</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{product.weight}{product.unit && product.unit !== 'piece' ? ` ${product.unit}` : ''}</p>
+                  </div>
+                )}
+                {product.origin && (
+                  <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-700">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Origin</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{product.origin}</p>
+                  </div>
+                )}
+                {product.shelfLife && (
+                  <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-3 border border-slate-100 dark:border-slate-700">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Shelf Life</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{product.shelfLife}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Nutritional Info */}
+            {product.nutritionalInfo && (product.nutritionalInfo.calories || product.nutritionalInfo.protein || product.nutritionalInfo.carbs || product.nutritionalInfo.fat || product.nutritionalInfo.fiber) && (
+              <div className="space-y-3">
+                <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">Nutritional Info (per serving)</p>
+                <div className="flex flex-wrap gap-2">
+                  {product.nutritionalInfo.calories && (
+                    <div className="flex items-center gap-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg px-3 py-2 border border-orange-100 dark:border-orange-800">
+                      <span className="text-xs">🔥</span>
+                      <div>
+                        <p className="text-[9px] font-bold text-orange-600 dark:text-orange-400 uppercase">Calories</p>
+                        <p className="text-xs font-black text-orange-700 dark:text-orange-300">{product.nutritionalInfo.calories}</p>
+                      </div>
+                    </div>
+                  )}
+                  {product.nutritionalInfo.protein && (
+                    <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg px-3 py-2 border border-blue-100 dark:border-blue-800">
+                      <span className="text-xs">💪</span>
+                      <div>
+                        <p className="text-[9px] font-bold text-blue-600 dark:text-blue-400 uppercase">Protein</p>
+                        <p className="text-xs font-black text-blue-700 dark:text-blue-300">{product.nutritionalInfo.protein}</p>
+                      </div>
+                    </div>
+                  )}
+                  {product.nutritionalInfo.carbs && (
+                    <div className="flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg px-3 py-2 border border-yellow-100 dark:border-yellow-800">
+                      <span className="text-xs">⚡</span>
+                      <div>
+                        <p className="text-[9px] font-bold text-yellow-600 dark:text-yellow-400 uppercase">Carbs</p>
+                        <p className="text-xs font-black text-yellow-700 dark:text-yellow-300">{product.nutritionalInfo.carbs}</p>
+                      </div>
+                    </div>
+                  )}
+                  {product.nutritionalInfo.fat && (
+                    <div className="flex items-center gap-2 bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2 border border-red-100 dark:border-red-800">
+                      <span className="text-xs">🧈</span>
+                      <div>
+                        <p className="text-[9px] font-bold text-red-600 dark:text-red-400 uppercase">Fat</p>
+                        <p className="text-xs font-black text-red-700 dark:text-red-300">{product.nutritionalInfo.fat}</p>
+                      </div>
+                    </div>
+                  )}
+                  {product.nutritionalInfo.fiber && (
+                    <div className="flex items-center gap-2 bg-green-50 dark:bg-green-900/20 rounded-lg px-3 py-2 border border-green-100 dark:border-green-800">
+                      <span className="text-xs">🌾</span>
+                      <div>
+                        <p className="text-[9px] font-bold text-green-600 dark:text-green-400 uppercase">Fiber</p>
+                        <p className="text-xs font-black text-green-700 dark:text-green-300">{product.nutritionalInfo.fiber}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Tags */}
+            {product.tags && product.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {product.tags.map((tag, i) => (
+                  <span key={i} className="text-[10px] font-bold text-primary bg-primary/10 dark:bg-primary/20 px-2.5 py-1 rounded-full border border-primary/10">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+
             {/* Controls */}
             <div className="space-y-4">
               <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Select Quantity ({getUnitDisplay(product)})</p>
@@ -176,7 +300,7 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* Description Minimalist */}
+            {/* Description */}
             <div className="space-y-4 py-8 border-y border-slate-100 dark:border-slate-800 transition-colors">
               <p className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest">Product Details</p>
               <div className="grid grid-cols-1 gap-3">
