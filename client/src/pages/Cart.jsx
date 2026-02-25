@@ -260,14 +260,20 @@ const Cart = () => {
                   <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
                     <div className="flex items-center bg-slate-100 dark:bg-slate-900 rounded-xl p-1 border border-slate-200 dark:border-slate-700">
                       <button
-                        onClick={() => updateCartItem(product._id, Math.max(0.5, cartItems[product._id] - 0.5))}
+                        onClick={() => {
+                          const step = ['vegetables','fruits','grain','dairy products'].includes(product.category?.toLowerCase()) ? 0.5 : 1;
+                          updateCartItem(product._id, Math.max(step, cartItems[product._id] - step));
+                        }}
                         className="w-8 h-8 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-primary transition-all font-bold"
                       >-</button>
                       <span className="px-4 text-sm font-bold text-slate-900 dark:text-white min-w-[80px] text-center">
                         {formatQuantity(cartItems[product._id])} {getUnitDisplay(product)}
                       </span>
                       <button
-                        onClick={() => updateCartItem(product._id, cartItems[product._id] + 0.5)}
+                        onClick={() => {
+                          const step = ['vegetables','fruits','grain','dairy products'].includes(product.category?.toLowerCase()) ? 0.5 : 1;
+                          updateCartItem(product._id, cartItems[product._id] + step);
+                        }}
                         className="w-8 h-8 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-primary transition-all font-bold"
                       >+</button>
                     </div>

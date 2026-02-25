@@ -67,6 +67,16 @@ const EditProduct = () => {
     const [fiber, setFiber] = useState('');
     const [dragOver, setDragOver] = useState(false);
     const fileInputRef = useRef(null);
+    const [activeSection, setActiveSection] = useState(0);
+    const sectionRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
+
+    const sections = [
+        { label: 'Basic Info', icon: '📋' },
+        { label: 'Media', icon: '📸' },
+        { label: 'Pricing', icon: '💰' },
+        { label: 'Details', icon: '📦' },
+        { label: 'Nutrition', icon: '🥗' },
+    ];
 
     const discount = price && offerPrice ? Math.round(((price - offerPrice) / price) * 100) : 0;
 
@@ -198,6 +208,23 @@ const EditProduct = () => {
                     </div>
                     <span className="text-[10px] font-mono text-gray-400 bg-gray-100 dark:bg-slate-800 px-3 py-1 rounded-lg">ID: {product?._id?.slice(-8)}</span>
                 </div>
+                <div className="hidden md:flex items-center gap-1 bg-gray-100 dark:bg-slate-800 rounded-xl p-1">
+                    {sections.map((sec, i) => (
+                        <button
+                            key={i}
+                            type="button"
+                            onClick={() => {
+                                setActiveSection(i);
+                                sectionRefs[i]?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }}
+                            className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 ${activeSection === i
+                                ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
+                                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
+                        >
+                            <span className="mr-1">{sec.icon}</span> {sec.label}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             <form onSubmit={onSubmitHandler} className="max-w-5xl mx-auto p-6 space-y-6">
@@ -205,7 +232,7 @@ const EditProduct = () => {
                     {/* Left Column */}
                     <div className="lg:col-span-2 space-y-6">
                         {/* Basic Information */}
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm">
+                        <div ref={sectionRefs[0]} className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm scroll-mt-24">
                             <SectionHeader icon="📋" title="Basic Information" subtitle="Product name, description and category" />
                             <div className="space-y-5">
                                 <InputField label="Product Name" required>
@@ -237,7 +264,7 @@ const EditProduct = () => {
                         </div>
 
                         {/* Product Images */}
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm">
+                        <div ref={sectionRefs[1]} className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm scroll-mt-24">
                             <SectionHeader icon="📸" title="Product Media" subtitle="Manage existing images or upload new ones" />
 
                             {/* Existing Images */}
@@ -296,7 +323,7 @@ const EditProduct = () => {
                         </div>
 
                         {/* Pricing & Stock */}
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm">
+                        <div ref={sectionRefs[2]} className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm scroll-mt-24">
                             <SectionHeader icon="💰" title="Pricing & Stock" subtitle="Set pricing, discount and inventory" />
                             <div className="space-y-5">
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -333,7 +360,7 @@ const EditProduct = () => {
                         </div>
 
                         {/* Nutritional Info */}
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm">
+                        <div ref={sectionRefs[4]} className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm scroll-mt-24">
                             <SectionHeader icon="🥗" title="Nutritional Information" subtitle="Optional — helps customers make informed choices" />
                             <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
                                 {[
@@ -387,7 +414,7 @@ const EditProduct = () => {
                         </div>
 
                         {/* Product Details */}
-                        <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm">
+                        <div ref={sectionRefs[3]} className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm scroll-mt-24">
                             <SectionHeader icon="📦" title="Product Details" subtitle="Specifications and attributes" />
                             <div className="space-y-5">
                                 <div className="grid grid-cols-2 gap-4">

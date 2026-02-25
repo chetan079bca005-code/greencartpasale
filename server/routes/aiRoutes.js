@@ -1,17 +1,16 @@
 import express from 'express';
 import { getPricingSuggestions, getInventoryForecast } from '../controllers/aiController.js';
+import authSeller from '../middlewares/authSeller.js';
 
 const router = express.Router();
 
 /**
  * AI Routes
  * Prefixed with /api/ai
+ * Protected by seller authentication
  */
 
-// In a real app, these should be protected by an Admin middleware
-// e.g., router.get('/pricing-suggestions', protect, admin, getPricingSuggestions);
-
-router.get('/pricing-suggestions', getPricingSuggestions);
-router.get('/inventory-forecast', getInventoryForecast);
+router.get('/pricing-suggestions', authSeller, getPricingSuggestions);
+router.get('/inventory-forecast', authSeller, getInventoryForecast);
 
 export default router;

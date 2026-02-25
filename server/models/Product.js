@@ -11,6 +11,8 @@ const productSchema = new mongoose.Schema({
     category: {type: String, required: true},
     inStock: {type: Boolean, default: true },
     countInStock: {type: Number, default: 100},
+    rating: {type: Number, default: 0},
+    numReviews: {type: Number, default: 0},
 
     // Advanced product info
     weight: {type: String, default: ''},           // e.g. "500g", "1kg", "250ml"

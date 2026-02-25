@@ -237,10 +237,7 @@ export const AppContextProvider = ({ children }) => {
   const removeFromCart = (itemId) => {
     let cartData = structuredClone(cartItems);
     if (cartData[itemId]) {
-      cartData[itemId] -= 1;
-      if (cartData[itemId] === 0) {
-        delete cartData[itemId];
-      }
+      delete cartData[itemId];
     }
     toast.success('Removed from cart');
     setCartItems(cartData);

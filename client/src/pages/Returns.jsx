@@ -26,7 +26,7 @@ const Returns = () => {
   ];
 
   return (
-    <div className="pb-24">
+    <div className="pb-24 dark:bg-slate-900 transition-colors duration-500 min-h-screen">
       {/* Header Section */}
       <div className="bg-slate-900 py-16 px-6 text-center relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
@@ -44,20 +44,20 @@ const Returns = () => {
           {/* Return Policy Overview */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {returnPolicy.map((policy, index) => (
-              <div key={index} className="premium-card p-8 bg-white group hover:bg-slate-900 transition-all duration-500 border-slate-100">
-                <h3 className="text-xl font-black text-slate-800 mb-4 uppercase tracking-tight group-hover:text-white transition-colors">{policy.title}</h3>
-                <p className="text-slate-500 font-medium text-sm leading-relaxed group-hover:text-slate-400 transition-colors">{policy.description}</p>
+              <div key={index} className="premium-card p-8 bg-white dark:bg-slate-800 group hover:bg-slate-900 dark:hover:bg-slate-700 transition-all duration-500 border-slate-100 dark:border-slate-700">
+                <h3 className="text-xl font-black text-slate-800 dark:text-white mb-4 uppercase tracking-tight group-hover:text-white transition-colors">{policy.title}</h3>
+                <p className="text-slate-500 dark:text-slate-400 font-medium text-sm leading-relaxed group-hover:text-slate-400 transition-colors">{policy.description}</p>
               </div>
             ))}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {/* Non-Returnable Items */}
-            <div className="premium-card p-10 bg-white border-slate-100">
-              <h2 className="text-2xl font-black text-slate-900 mb-8 uppercase tracking-tight italic">Non-Returnable Items</h2>
+            <div className="premium-card p-10 bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700">
+              <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-8 uppercase tracking-tight italic">Non-Returnable Items</h2>
               <ul className="space-y-4">
                 {nonReturnableItems.map((item, index) => (
-                  <li key={index} className="flex items-start gap-4 text-slate-500 font-medium">
+                  <li key={index} className="flex items-start gap-4 text-slate-500 dark:text-slate-400 font-medium">
                     <div className="w-5 h-5 bg-red-500/10 rounded-full flex items-center justify-center mt-0.5 flex-shrink-0">
                       <svg className="w-3 h-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" /></svg>
                     </div>
@@ -68,8 +68,8 @@ const Returns = () => {
             </div>
 
             {/* Return Instructions */}
-            <div className="premium-card p-10 bg-white border-slate-100">
-              <h2 className="text-2xl font-black text-slate-900 mb-8 uppercase tracking-tight italic">How to Return</h2>
+            <div className="premium-card p-10 bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-700">
+              <h2 className="text-2xl font-black text-slate-900 dark:text-white mb-8 uppercase tracking-tight italic">How to Return</h2>
               <div className="space-y-8">
                 {[
                   "Contact our support team to request a return.",
@@ -78,8 +78,8 @@ const Returns = () => {
                   "Ship the item back to us using a trackable shipping method."
                 ].map((text, i) => (
                   <div key={i} className="flex items-start gap-5">
-                    <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-slate-900 text-white font-black rounded-lg text-xs italic">{i + 1}</span>
-                    <p className="text-slate-500 font-medium text-sm leading-relaxed pt-1.5">{text}</p>
+                    <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-slate-900 dark:bg-slate-600 text-white font-black rounded-lg text-xs italic">{i + 1}</span>
+                    <p className="text-slate-500 dark:text-slate-400 font-medium text-sm leading-relaxed pt-1.5">{text}</p>
                   </div>
                 ))}
               </div>

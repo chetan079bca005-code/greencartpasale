@@ -59,6 +59,7 @@ const AddProduct = () => {
   const [activeSection, setActiveSection] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
+  const sectionRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
 
   const { axios } = useAppContext();
 
@@ -180,7 +181,10 @@ const AddProduct = () => {
                 <button
                   key={i}
                   type="button"
-                  onClick={() => setActiveSection(i)}
+                  onClick={() => {
+                    setActiveSection(i);
+                    sectionRefs[i]?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
                   className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 ${activeSection === i
                     ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
                     : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
@@ -198,7 +202,7 @@ const AddProduct = () => {
           {/* Left Column - Main Info */}
           <div className="lg:col-span-2 space-y-6">
             {/* Basic Information */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm">
+            <div ref={sectionRefs[0]} className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm scroll-mt-24">
               <SectionHeader icon="📋" title="Basic Information" subtitle="Product name, description and category" />
 
               <div className="space-y-5">
@@ -232,7 +236,7 @@ const AddProduct = () => {
             </div>
 
             {/* Product Images */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm">
+            <div ref={sectionRefs[1]} className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm scroll-mt-24">
               <SectionHeader icon="📸" title="Product Media" subtitle="Upload up to 6 high-quality product images" />
 
               <div
@@ -296,7 +300,7 @@ const AddProduct = () => {
             </div>
 
             {/* Pricing & Stock */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm">
+            <div ref={sectionRefs[2]} className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm scroll-mt-24">
               <SectionHeader icon="💰" title="Pricing & Stock" subtitle="Set pricing, discount and inventory levels" />
 
               <div className="space-y-5">
@@ -339,7 +343,7 @@ const AddProduct = () => {
             </div>
 
             {/* Nutritional Info */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm">
+            <div ref={sectionRefs[4]} className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm scroll-mt-24">
               <SectionHeader icon="🥗" title="Nutritional Information" subtitle="Optional — helps customers make informed choices" />
 
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
@@ -412,7 +416,7 @@ const AddProduct = () => {
             </div>
 
             {/* Product Details */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm">
+            <div ref={sectionRefs[3]} className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm scroll-mt-24">
               <SectionHeader icon="📦" title="Product Details" subtitle="Specifications and attributes" />
 
               <div className="space-y-5">
