@@ -3,6 +3,76 @@ import { useAppContext } from '../context/AppContext'
 import ProductCard from '../components/ProductCard'
 import { Link } from 'react-router-dom'
 import { categories } from '../assets/assets'
+import toast from 'react-hot-toast'
+
+// Compact newsletter bar for the Home page
+const NewsletterBar = () => {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/newsletter/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setSubscribed(true);
+        setEmail('');
+        toast.success('Subscribed successfully!');
+      } else {
+        toast.error(data.message || 'Subscription failed');
+      }
+    } catch {
+      toast.error('Server error. Try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (subscribed) {
+    return (
+      <div className="flex items-center justify-center gap-3 text-white py-2">
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span className="font-bold text-lg">You're subscribed! Check your inbox for deals.</span>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubscribe} className="flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="text-white text-center md:text-left">
+        <h3 className="text-2xl font-black">Get Exclusive Offers!</h3>
+        <p className="text-emerald-100 text-sm">Subscribe for deals &amp; updates</p>
+      </div>
+      <div className="flex gap-2 w-full md:w-auto">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          className="flex-1 md:w-72 px-4 py-3 rounded-xl border-0 focus:ring-2 focus:ring-white/30 text-slate-900"
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="px-6 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all whitespace-nowrap disabled:opacity-60"
+        >
+          {loading ? 'Subscribing...' : 'Subscribe'}
+        </button>
+      </div>
+    </form>
+  );
+};
 
 const Home = () => {
   const { products, user, axios, navigate, currency } = useAppContext()
@@ -407,22 +477,7 @@ const Home = () => {
       {/* Newsletter - Compact */}
       <section className="py-10 bg-primary">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-white text-center md:text-left">
-              <h3 className="text-2xl font-black">Get Exclusive Offers!</h3>
-              <p className="text-emerald-100 text-sm">Subscribe for deals & updates</p>
-            </div>
-            <div className="flex gap-2 w-full md:w-auto">
-              <input 
-                type="email" 
-                placeholder="Enter your email"
-                className="flex-1 md:w-72 px-4 py-3 rounded-xl border-0 focus:ring-2 focus:ring-white/30 text-slate-900"
-              />
-              <button className="px-6 py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-all whitespace-nowrap">
-                Subscribe
-              </button>
-            </div>
-          </div>
+          <NewsletterBar />
         </div>
       </section>
 

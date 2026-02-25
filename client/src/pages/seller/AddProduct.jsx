@@ -360,9 +360,9 @@ const AddProduct = () => {
           </div>
 
           {/* Right Sidebar */}
-          <div className="space-y-6">
+          <div className="lg:sticky lg:top-20 lg:max-h-[calc(95vh-6rem)] lg:overflow-y-auto no-scrollbar space-y-6">
             {/* Product Preview Card */}
-            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm sticky top-24">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 shadow-sm">
               <SectionHeader icon="👁" title="Live Preview" subtitle="How it appears to customers" />
 
               <div className="rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden bg-gray-50 dark:bg-slate-900 p-3">
